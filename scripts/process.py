@@ -51,6 +51,7 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
             yearPrevious = year - 10
             destName_previous = '{1}_{0}_{2}'.format(scenario, yearPrevious, attr_value)
     createFolder(cityDestPath + "data/GeoTIFF")
+    
     if processRawOutput == 'yes':
         # Check how many files exist if exist in scrFolder
         # Copy + remane tifs from Spatial Disaggregation folder to MeasuringSegreagation folder,

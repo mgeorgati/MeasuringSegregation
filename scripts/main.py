@@ -1,5 +1,6 @@
 from process import process_Projections, process_ProjectionsTotal, process_ProjectionsNoYear
 from processKNN import process_KNN, process_KNN_total 
+
 def main(city):
     if city == 'grootams':
         from config.grootams import attr_values, years_list, previous_years_list, templatePath
@@ -17,6 +18,7 @@ def main(city):
         from config.rom import attr_values, years_list,years_list_hist, previous_years_list, templatePath
         srcNameDef = 'Dasy_16unet_10epochspi_12AIL5_it5' #----------
     
+
     for scenario in [ 'hist']: #'bs', 'war','re' 'bch', 'eur','re', 'hist', 'bch','bs'
         if scenario =='hist': 
             years_list = years_list_hist
