@@ -3,21 +3,20 @@ from basic.basic import createFolder
 from basic.moveNega import fixNegatives, removeRandomPeople
 from basic.summaryStat import summaryStatistics
 from basic.calcDissimilarity import calcDissimilarity
-from basic.conversions import combineGeoJSON, pointsTOgrid, rastertoshp
-from basic.fixStructure import processProjections, calcDifference
+from basic.conversions import combineGeoJSON, pointsTOgrid, rastertoshp, shptoraster
+from basic.fixStructure import processProjections, calcDifference, fixNull
 from basic.rasterToshp import mainRaster
-from calcKNN.plot_KNN import plot_KNNneigh
 from config.config import python_scripts_folder_path
 from plotting.createGifs import createGIFs
 from plotting.plot import plotProjections, plotProjectionsVectors
-
+from config.config import gdal_rasterize_path
+from calcKNN.estimateSumKNN import calc_summaryKNN_sums
 
 def process_Projections(city, scenario, attr_value, year, srcNameDef,
-                        processRawOutput, init_calc_dif, fix_negative_values,
-                        init_raster_shp, 
+                        processRawOutput, init_fix_null, init_calc_dif, fix_negative_values,
+                        init_raster_shp, init_shp_to_raster,
                         
-                        plotMaps100, 
-                        calc_KNNneigh, templatePath, yearPrevious, calc_Conv, plot_knn, plot_knn_dif): 
+                        plotMaps100): 
     
     if city == 'grootams':
         from config.grootams import (cityDestPath, districtPath, invertArea,
@@ -25,7 +24,7 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
                                      waterPath)
      
     elif city == 'ams':
-        from config.ams import (cityDestPath, districtPath, invertArea,
+        from config.ams import (cityDestPath, districtPath, invertArea, raster_file,
                                 neighPath, srcPath, streetsPath, waterPath)
         
     elif city == 'cph':
@@ -37,7 +36,7 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
                                 neighPath, srcPath, streetsPath, waterPath)
         
     elif city == 'rom':
-        from config.rom import (cityDestPath, districtPath, invertArea,
+        from config.rom import (cityDestPath, districtPath, invertArea, raster_file,
                                 neighPath, srcPath, streetsPath, waterPath)
     
     if year <= 2021 :
@@ -46,7 +45,7 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
     else:
         destName = '{1}_{0}_{2}'.format(scenario, year, attr_value)
         destNameWhole = '{1}_{0}'.format(scenario, year, attr_value)
-        if year == 2030:
+        if year <= 2030:
             destName_previous = '2020_{2}'.format(scenario, year, attr_value)
         else:
             yearPrevious = year - 10
@@ -58,9 +57,21 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
         # newName = scenario + year + attr   
         processProjections(city, scenario, attr_value, year, srcNameDef, srcPath, cityDestPath)
     
+    if init_fix_null == "yes":
+        src_file = cityDestPath + "data/GeoTIFF/{0}.tif".format(destName)
+        
+        print(src_file)
+        createFolder(cityDestPath + "data/GeoTIFF_sum")
+        dest_path = cityDestPath + "data/GeoTIFF/{0}_fixed.tif".format(destName)
+        
+        print('| Converting raster to vector layer')
+        fixNull( src_file, dest_path)
+        print('------------------------------ Converting raster to vector layer was succesfull ------------------------------')
+        print('------------------------------ for {0}, in {1}, in scenario:{2}, in year:{3} ------------------------------'.format(attr_value, city, scenario, year))
+    
     if init_calc_dif == "yes":
         if year == 2030:
-            src_file_previous = cityDestPath + "data/GeoTIFF/{0}.tif".format(destName_previous)
+            src_file_previous = cityDestPath + "data/GeoTIFF/{0}_fixed.tif".format(destName_previous)
         else:
             src_file_previous = cityDestPath + "data/GeoTIFF_sum/{0}.tif".format(destName_previous)
         src_file = cityDestPath + "data/GeoTIFF_dif/{0}.tif".format(destName)
@@ -96,24 +107,18 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
         print('------------------------------ Converting raster to vector layer was succesfull ------------------------------')
         print('------------------------------ for {0}, in {1}, in scenario:{2}, in year:{3} ------------------------------'.format(attr_value, city, scenario, year))
     
+    if init_shp_to_raster  == "yes":
+        src_file = cityDestPath + "data/GPKG/{0}.geojson".format(destNameWhole)
+        dst_file = cityDestPath + "data/GeoTIFF/{0}.tif".format(destName)
+        shptoraster(raster_file, src_file, gdal_rasterize_path, dst_file, attr_value , xres=100, yres=100)
     
-
     if plotMaps100 == 'yes':
-        plotProjections(destName, city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
-        #plotProjectionsVectors(destNameWhole , city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
-
-    if calc_KNNneigh == "yes":
-        if attr_value == 'totalpop':
-            nnn = 200
-        else: nnn = 25
-        plot_KNNneigh(city, scenario, attr_value, nnn, cityDestPath, destName, waterPath, templatePath, yearPrevious,
-                  year, districtPath, neighPath, streetsPath, waterPath,
-                  calc_Conv, plot_knn, plot_knn_dif)
+        #plotProjections(destName, city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
+        plotProjectionsVectors(destNameWhole , city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
                 
 def process_ProjectionsTotal(city, scenario, attr_values, year,
                         init_shp_gpkg, init_point_cell, 
-                        init_calc_summary, init_calc_dis,
-                        
+                        init_calc_summary, init_calc_dis, calcSums
                         ): 
     
     if city == 'grootams':
@@ -177,6 +182,11 @@ def process_ProjectionsTotal(city, scenario, attr_values, year,
         calcDissimilarity(srcPath, dissimFile, year, attr_values, city)
         print('------------------------------ Estmating the dissimilarity index was succesfull ------------------------------')
         print('------------------------------ for {0}, in scenario:{1}, in year:{2} ------------------------------'.format(city, scenario, year))
+
+    if calcSums == "yes":
+        excelFile = cityDestPath + "/Indexes/summaryKNN_{}.xlsx".format(scenario)
+        
+        calc_summaryKNN_sums(cityDestPath,city,year, scenario, attr_values, excelFile)
         
 def process_ProjectionsNoYear(city, attr_values, scenario, create_GIFs):
     

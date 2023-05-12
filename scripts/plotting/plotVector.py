@@ -103,14 +103,10 @@ def plot_mapVectorPolygons(city, evalType, src_path, exportPath, title, LegendTi
         waterTif = rasterio.open(waterPath)
         # colors for water layer
         cmapWater = ListedColormap(["#00000000","#7fa9b060" ])
+        rasterio.plot.show(waterTif, ax=ax, cmap=cmapWater, zorder=5)
     # Plot the data                       
     src.plot(column='{}'.format(attr_value), ax=ax, cmap=cmap, norm=norm, edgecolor='#00000000',linewidth= 0.0, zorder=1) #norm=norm,
     
-    rasterio.plot.show(waterTif, ax=ax, cmap=cmapWater, zorder=5)
-    
-    # Set the plot extent                
-    xlim = ([src.total_bounds[0],  src.total_bounds[2]])
-    ylim = ([src.total_bounds[1],  src.total_bounds[3]])
     ax.set_xlim(xlim)
     ax.set_ylim(ylim)
 

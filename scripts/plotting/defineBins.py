@@ -51,8 +51,8 @@ def defineBinsCity(city, attr_value, valMin, valMax):
         
     elif city == 'crc': 
         #'totalpop', 'NLD', 'EU_West', 'EU_East', 'OthEurope', 'TurMor', 'ME_Africa', 'colonies'
-        if attr_value == 'totalpop':
-            a = [valMin, 1, 50, 100, 150, 200, 250]  
+        if attr_value == 'totalpop' or attr_value == 'totalmig':
+            a = [0, 1, 50, 100, 150, 200, 250]  
         elif attr_value == 'POL':
             a = [valMin, 1, 50, 100, 150, 200, 250] 
         else :

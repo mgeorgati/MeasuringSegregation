@@ -100,6 +100,7 @@ def calcConv(inputPath, raster_file, nnn, outPath, templatePath):
     writeRaster(inputPath, outPath, cf)
     #return cf
 
+
 def plotKNN(srcPath, exportPath, city, attr_value, thres, year, districtPath, polyPath, streetsPath, waterPath):
     # Plot the population distribution of the predictions 
     if not os.path.exists(exportPath):

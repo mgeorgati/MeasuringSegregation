@@ -102,17 +102,65 @@ def num_pieces(num, length):
     all_list.append(num) 
     return all_list
 
-def removeNegatives(popflat, a, pop, listNegatives):
-    for i in listNegatives:
-        removersPos = np.random.choice(a, 1, p=pop.flatten()/pop.sum()).tolist()
-        #print(removersPos)
-        if popflat[removersPos[0]] >= np.abs(i):
-            #print('cellValue:', popflat[removersPos[0]], 'pos:', removersPos[0], 'value to be replaced with:',i)
-            popflat[removersPos[0]] = popflat[removersPos[0]] + i
-            #print('cellValue:', popflat[removersPos[0]], 'pos:', removersPos[0], 'value to be replaced with:',i)
-            listNegatives.remove(i)
+def removeNegatives(popflat, B, pop, listNegatives, nonNegativePop):
     
+    #popsum = pop[pop>0].sum()
+    p = np.absolute(nonNegativePop.flatten()/nonNegativePop.sum())
+     
+    #p = np.nan_to_num(p, posinf=0, neginf=0, nan=0)
+    #print(p.sum(),popsum)
+    #p = np.nan_to_num(p/p.sum())
+    
+    for i in listNegatives:
+        #p /= p.sum() #fix for: Probabilities didn't sum to 1
+        removersPos = np.random.choice(B, 1, p=p).tolist()
+        #print(removersPos)
+        #print('cellValue:', popflat[removersPos[0]], 'pos:', removersPos[0], 'value to be replaced with:',i)
+        if popflat[removersPos] >= np.abs(i):
+            #print('cellValue:', popflat[removersPos], 'pos:', removersPos, 'value to be replaced with:',i)
+            popflat[removersPos] = popflat[removersPos] + i
+            #print('cellValue:', popflat[removersPos], 'pos:', removersPos, 'value to be replaced with:',i)
+            listNegatives.remove(i)
     return popflat
+
+import multiprocessing
+from datetime import datetime 
+
+def multiple(popflat, a, pop, listNegatives):
+    # Create a list of numbers
+    numbers = listNegatives
+
+    # Create a multiprocessing.Queue to store the output
+    output = multiprocessing.Queue()
+
+    # Divide the list of numbers into chunks
+    num_chunks = 4
+    chunk_size = len(numbers) // num_chunks
+    chunks = [numbers[i:i+chunk_size] for i in range(0, len(numbers), chunk_size)]
+
+    # Create a list of processes
+    processes = []
+    for chunk in chunks:
+        p = multiprocessing.Process(target=removeNegatives, args=(popflat, a, pop, listNegatives))
+        processes.append(p)
+    # Start the processes
+    for p in processes:
+        p.start()
+    
+    # Wait for the processes to finish
+    for p in processes:
+        p.join()
+    
+    # Get the output from the queue
+    results = []
+    results.append(popflat)
+    while not output.empty():
+        result = output.get()
+        results.append(result)
+
+    # Print the results
+    print(results)
+    return results
 
 def removeRandomPeople(src_path, src_file_previous, fraster):
     disseverdatasetA, rastergeo = readRaster(src_file_previous)
@@ -131,7 +179,9 @@ def removeRandomPeople(src_path, src_file_previous, fraster):
     arr = arr.astype(np.int64)
     
     popflat = arr.flatten()
-
+    
+    nonNegativePop = popflat[popflat>0]
+    
     num = np.abs(popflat[popflat<0].sum())
     length = len(popflat[popflat>0]) # number of cells with positive values
     print('arr initial', popflat.sum(), 'positive:', popflat[popflat >0].sum(), 'negative:', popflat[popflat <0].sum())
@@ -140,9 +190,12 @@ def removeRandomPeople(src_path, src_file_previous, fraster):
         listNegatives = []
         for x in popflat:
             if x < 0:
-                listNegatives.append(x)
+                listNegatives.append(x)  
+
+        B = np.where(popflat > 0)[0].tolist()
+
         while len(listNegatives)>0:
-            removeNegatives(popflat,a, pop, listNegatives)
+            removeNegatives(popflat, B, pop, listNegatives, nonNegativePop)
         
         popflat[popflat<0] = 0
         print(popflat.sum(), 'positive:', popflat[popflat >0].sum(), 'negative:', popflat[popflat <0].sum())

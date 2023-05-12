@@ -62,7 +62,7 @@ def combineGeoJSON(geojsonPath, dst_csv, dst_vector, destNameWhole, attr_values,
             else: df = gpd.read_file(i)
 
             df['id'] = np.arange(len(df))        
-            df = df.loc[df['{}'.format(name)] > 0 ]
+            #df = df.loc[df['{}'.format(name)] > 0 ]
             df = df.set_index('id')
             appended_data.append(df)
         
@@ -73,7 +73,7 @@ def combineGeoJSON(geojsonPath, dst_csv, dst_vector, destNameWhole, attr_values,
                 lf = df
             else:
                 # if the merged dataframe is not empty, merge the current dataframe with it
-                lf= pd.merge(lf, df, on='geometry')
+                lf= pd.merge(lf, df, left_on='geometry', right_on='geometry', suffixes=('_left', '_right'))
 
         #lf = pd.concat(appended_data, axis=1)
         for i in lf.columns:
@@ -93,10 +93,12 @@ def combineGeoJSON(geojsonPath, dst_csv, dst_vector, destNameWhole, attr_values,
             lf['totalmig']= lf['BGD']+ lf['PHL']+ lf['ROU']+ lf['EU']+ lf['nonEUEu']+ lf['Africa'] + lf['America']+ lf['Asia']
             lf['totalpop']= lf['totalmig'] + lf['ITA']
         
-        lf['eurogrid']= lf['lon'].astype(int).astype(str) + 'N' + lf['lat'].astype(int).astype(str) + 'E'
-
+        lf = lf.rename(columns={'lat_left':'lat','lon_left':'lon'})
+        lf = lf.loc[:,~lf.columns.duplicated()].copy()
+        lf = lf.drop(columns=['lat_right','lon_right'])
         print(lf.head(2), lf.columns)
-        lf = lf.drop(columns=['lat_x','lon_x', 'lat_y', 'lon_y'])
+        lf['eurogrid']= lf['lon'].astype(int).astype(str) + 'N' + lf['lat'].astype(int).astype(str) + 'E'
+        lf = lf.loc[lf['totalpop'] > 0 ]
         #WRITE DATAFRAME TO CSV
         lf.to_csv(dst_csv)
         
@@ -158,7 +160,7 @@ def shptoraster(raster_file, src_file, gdal_rasterize_path, dst_file, column_nam
     maxx = minx + geoTransform[1] * data.RasterXSize
     miny = maxy + geoTransform[5] * data.RasterYSize
     data = None    
-    cmd = '{0}/gdal_rasterize.exe -a "{9}" -te {1} {2} {3} {4} -tr {5} "{6}" "{7}" "{8}"'\
+    cmd = """ "{0}/gdal_rasterize.exe" -a "{9}" -te {1} {2} {3} {4} -tr {5} "{6}" "{7}" "{8}" """\
                 .format(gdal_rasterize_path, minx, miny, maxx, maxy, xres, yres, src_file, dst_file, column_name)
                 
     subprocess.call(cmd, shell=True)

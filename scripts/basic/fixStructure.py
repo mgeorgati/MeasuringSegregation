@@ -5,7 +5,9 @@ import glob
 sys.path.append('./') 
 from config.config import python_scripts_folder_path
 from basic.basic import renameCopyTif, vrt2tifGDAL, createFolder
-
+from basic.osgeoutils import readRaster, writeRaster
+import rasterio as rs
+import numpy as np
 def processProjections(city, scenario, attr_value, year, srcNameDef, srcPath, cityDestPath):
     print('----- Running process for {0}, scenario:{1}, attr_value:{2}, in {3} -----'.format(city, scenario, attr_value, year))
     
@@ -61,11 +63,23 @@ def fixAms(city, scenario, year, attr_value, srcNameDef, removeOuterValues, fixC
             createFolder(os.path.dirname( os.path.dirname(srcPath_alt)) + '/{}/'.format(city))
             vrt2tifGDAL(raster_file_small, os.path.dirname( os.path.dirname(srcPath_alt)) + '/grootams_clipped/' + name + '.tif' , os.path.dirname( os.path.dirname(srcPath_alt)) + '/{}/'.format(city) + 'dissever01_{0}_CLF_LR0001_{1}_{2}_{4}_{3}'.format(scenario, year, city, attr_value, srcNameDef) + '.tif')
         
-def calcDifference( srcPath, src_path_previous, dest_path):
-        
+def calcDifference( srcPath, src_path_previous, dest_path):    
+    
+    
     cmds = 'python {0}/gdal_calc.py -A "{1}" -B "{2}" --A_band=1 --B_band=1 --outfile="{3}" --calc="(A+B)"'.format(
         python_scripts_folder_path, srcPath, src_path_previous , dest_path)
     print(cmds)
     subprocess.call(cmds, shell=True)
+
+def fixNull( srcPath, dest_path):    
+    
+    disseverdatasetA, rastergeo = readRaster(srcPath)
+    src_previous = rs.open(srcPath)
+    pop = src_previous.read()
+    dataset = np.nan_to_num(pop, nan=0)
+    dataset = dataset.reshape(pop.shape[1], pop.shape[2])
+    print(dataset.shape)
+    writeRaster(dataset, rastergeo, dest_path)
+    
             
         

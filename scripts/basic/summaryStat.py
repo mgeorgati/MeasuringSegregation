@@ -250,6 +250,7 @@ def summaryStatistics(src_path, dst_path, attr_values, city, scenario, year):
         if i in pdf.columns:
             pdf = pdf.drop([i], axis=1)
 
+    
     for col in attr_values:
         if col == 'totalpop' or col == 'totalmig' : 
             fff = pdf[['totalpop', 'totalmig']]
@@ -261,8 +262,12 @@ def summaryStatistics(src_path, dst_path, attr_values, city, scenario, year):
             migTotal = fff['totalmig'].sum()        
         kf = fff[col]
         ngrids = kf[kf > 1].count()
-        fff['percPopCell_{}'.format(col)] = fff[col]/fff['totalpop'] *100
         
+        fff[fff[col]<0] = 0
+        
+        fff['percPopCell_{}'.format(col)] = fff[col]/fff['totalpop'] *100
+        fff[fff['percPopCell_{}'.format(col)]>10000000] = 0
+        fff[fff['percPopCell_{}'.format(col)]<-10000000] = 0
         fff.replace(0, np.nan, inplace=True)
         
         popmedian = fff[col].median(skipna=True)
@@ -274,6 +279,9 @@ def summaryStatistics(src_path, dst_path, attr_values, city, scenario, year):
         averagePop = fff[col].mean(skipna=True)
         
         avpercPopCellPop = fff['percPopCell_{}'.format(col)].mean(skipna=True)
+        #print('____________________________________')
+        #print(col, avpercPopCellPop, fff['percPopCell_{}'.format(col)].max(), fff['percPopCell_{}'.format(col)].mean(), fff['percPopCell_{}'.format(col)].min(skipna=True))
+        #print('____________________________________')
         if ndf.size == 0:
             ndf.loc[1] = [year, col, ngrids, popmedian, minPop, maxPop,sumPop, perctotal, percforeign, averagePop, avpercPopCellPop]
         else: 
