@@ -43,7 +43,7 @@ def combineGeoJSON(geojsonPath, dst_csv, dst_vector, destNameWhole, orig_csv, at
         for i in lf.columns:
             if i not in ['geometry','lat','lon']:
                 lf[i] = lf[i].fillna(0)
-        
+        """
         if city =='cph':
             lf['totalmig']= lf['EU_West']+ lf['EU_East']+ lf['EurNonEU']+ lf['MENAP']+ lf['Turkey']+ lf['OthNonWest']+ lf['OthWestern']
             lf['totalpop']= lf['totalmig'] + lf['DNK']
@@ -57,7 +57,7 @@ def combineGeoJSON(geojsonPath, dst_csv, dst_vector, destNameWhole, orig_csv, at
             lf['totalpop']= lf['totalmig'] + lf['POL']
         elif city =='rom' : 
             lf['totalmig']= lf['BGD']+ lf['PHL']+ lf['ROU']+ lf['EU']+ lf['nonEUEu']+ lf['Africa'] + lf['America']+ lf['Asia']
-            lf['totalpop']= lf['totalmig'] + lf['ITA']
+            lf['totalpop']= lf['totalmig'] + lf['ITA']"""
         
         print(lf.head(2), lf.columns)
         lf = lf.rename(columns={'lat_left':'lat','lon_left':'lon'})

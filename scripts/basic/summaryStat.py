@@ -227,9 +227,13 @@ def summaryStatistics(src_path, dst_path, attr_values, city, scenario, year):
     elif src_path.endswith('.geojson'): df = gpd.read_file(src_path, driver='GeoJSON',crs="EPSG:3035")
     else: print('///// - Input is not defined correctly - /////')
     
-    ndf = pd.DataFrame(columns=['Year','Item','Number of populated grid cells','Median population','Min population in grid cell',
-                                'Max population in grid cell','Population', '% in total population', '% in foreigner population','Average no of persons per populated grid',
-                                'Average share over total population per grid cell'
+    ndf = pd.DataFrame(columns=['Year','Item','Number of populated grid cells', 'Number of grid cells',   
+                                'Min population in grid cell','Max population in grid cell', 'Population', 
+                                '% in total population', '% in foreigner population',
+                                'Median population','Median population_0',
+                                'Average population', 'Average population_0',
+                                'Average % over total population',
+                                'Average % over total migration'
                                 ])
     if city=='ams':natives='NLD'
     elif city=='cph': natives='DNK'
@@ -261,31 +265,39 @@ def summaryStatistics(src_path, dst_path, attr_values, city, scenario, year):
             popTotal = fff['totalpop'].sum()
             migTotal = fff['totalmig'].sum()        
         kf = fff[col]
-        ngrids = kf[kf > 1].count()
-        
+        ngrids = kf[kf >= 1].count()
+        ngrids1 = kf[kf > 0].count()
         fff[fff[col]<0] = 0
         
         fff['percPopCell_{}'.format(col)] = fff[col]/fff['totalpop'] *100
+        fff['percMigCell_{}'.format(col)] = fff[col]/fff['totalmig'] *100
         fff[fff['percPopCell_{}'.format(col)]>10000000] = 0
         fff[fff['percPopCell_{}'.format(col)]<-10000000] = 0
         fff.replace(0, np.nan, inplace=True)
         
-        popmedian = fff[col].median(skipna=True)
         minPop = fff[col].min(skipna=True)
         maxPop = fff[col].max(skipna=True)
         sumPop = fff[col].sum(skipna=True)
         perctotal = sumPop/popTotal *100
         percforeign = sumPop/migTotal *100
-        averagePop = fff[col].mean(skipna=True)
-        
+
+        popmedian = kf[kf >= 1].median(skipna=True)
+        popmedian1 = kf[kf > 0].median(skipna=True)
+        averagePop = kf[kf >= 1].mean(skipna=True)
+        averagePop1 = kf[kf > 0].mean(skipna=True)
         avpercPopCellPop = fff['percPopCell_{}'.format(col)].mean(skipna=True)
-        #print('____________________________________')
-        #print(col, avpercPopCellPop, fff['percPopCell_{}'.format(col)].max(), fff['percPopCell_{}'.format(col)].mean(), fff['percPopCell_{}'.format(col)].min(skipna=True))
-        #print('____________________________________')
+        avpercPopCellMIg = fff['percMigCell_{}'.format(col)].mean(skipna=True)
+        #print(avpercPopCellMIg.dtype)
+        if avpercPopCellMIg == np.inf: 
+            avpercPopCellMIg = np.nan
+        if percforeign>100: 
+            percforeign= np.nan
         if ndf.size == 0:
-            ndf.loc[1] = [year, col, ngrids, popmedian, minPop, maxPop,sumPop, perctotal, percforeign, averagePop, avpercPopCellPop]
+            ndf.loc[1] = [year, col, ngrids, ngrids1, minPop, int(round(maxPop,0)), int(round(sumPop,0)), perctotal, percforeign, 
+            popmedian, popmedian1, averagePop, averagePop1, avpercPopCellPop, avpercPopCellMIg]
         else: 
-            ndf.loc[-1] = [year, col, ngrids, popmedian, minPop, maxPop,sumPop, perctotal, percforeign, averagePop, avpercPopCellPop]
+            ndf.loc[-1] = [year, col, ngrids, ngrids1, minPop, int(round(maxPop,0)), int(round(sumPop,0)), perctotal, round(percforeign,2), 
+            popmedian, popmedian1, averagePop, averagePop1, avpercPopCellPop, round(avpercPopCellMIg,2)]
             ndf.index = ndf.index + 1  # shifting index
             #ndf = ndf.sort_index()  # sorting by index
             # adding a row

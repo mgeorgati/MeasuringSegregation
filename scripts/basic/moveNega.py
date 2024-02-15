@@ -102,7 +102,7 @@ def num_pieces(num, length):
     all_list.append(num) 
     return all_list
 
-def removeNegatives(popflat, B, pop, listNegatives, nonNegativePop):
+def removeNegatives(popflat, pop, listNegatives, nonNegativePop):
     
     #popsum = pop[pop>0].sum()
     p = np.absolute(nonNegativePop.flatten()/nonNegativePop.sum())
@@ -110,10 +110,13 @@ def removeNegatives(popflat, B, pop, listNegatives, nonNegativePop):
     #p = np.nan_to_num(p, posinf=0, neginf=0, nan=0)
     #print(p.sum(),popsum)
     #p = np.nan_to_num(p/p.sum())
-    
+    #print(C)
     for i in listNegatives:
+        B = np.where(popflat >= np.abs(i))[0].tolist()
+        
+
         #p /= p.sum() #fix for: Probabilities didn't sum to 1
-        removersPos = np.random.choice(B, 1, p=p).tolist()
+        removersPos = np.random.choice(B, 1).tolist()
         #print(removersPos)
         #print('cellValue:', popflat[removersPos[0]], 'pos:', removersPos[0], 'value to be replaced with:',i)
         if popflat[removersPos] >= np.abs(i):
@@ -121,6 +124,9 @@ def removeNegatives(popflat, B, pop, listNegatives, nonNegativePop):
             popflat[removersPos] = popflat[removersPos] + i
             #print('cellValue:', popflat[removersPos], 'pos:', removersPos, 'value to be replaced with:',i)
             listNegatives.remove(i)
+            #else:
+                #print('naon')
+                #break
     return popflat
 
 import multiprocessing
@@ -193,10 +199,33 @@ def removeRandomPeople(src_path, src_file_previous, fraster):
                 listNegatives.append(x)  
 
         B = np.where(popflat > 0)[0].tolist()
-
-        while len(listNegatives)>0:
-            removeNegatives(popflat, B, pop, listNegatives, nonNegativePop)
         
+        listNegatives = sorted(listNegatives) #[0:10]
+        #print(listNegatives)
+        print(len(listNegatives), sum(listNegatives), min(listNegatives) )
+        """for x in listNegatives:
+            if x < -156:
+                listNegatives.remove(x)
+                print('1:', len(listNegatives), sum(listNegatives))
+                if (x%4) ==0:
+                    print('2:', x/4)
+                    listNegatives.append(x/4)
+                    listNegatives.append(x/4)
+                    print('3:', len(listNegatives), sum(listNegatives))
+                else:
+                    print('second', x-1/4)
+                    listNegatives.append(x+1/4)
+                    listNegatives.append(x+1/4)
+                    listNegatives.append(-1)
+                    print('4:', len(listNegatives), sum(listNegatives))
+
+        print(len(listNegatives), sum(listNegatives), min(listNegatives), len([x for x in listNegatives if x < -100]) )"""
+        #if max(B) < max(listNegatives):print('aaaaaaaaa')
+        
+        while len(listNegatives)>0:
+            removeNegatives(popflat, pop, listNegatives, nonNegativePop)
+            print(len(listNegatives), sum(listNegatives) )
+            #print(popflat.sum(), 'positive:', popflat[popflat >0].sum(), 'negative:', popflat[popflat <0].sum())
         popflat[popflat<0] = 0
         print(popflat.sum(), 'positive:', popflat[popflat >0].sum(), 'negative:', popflat[popflat <0].sum())
         print(pop.shape[1], pop.shape[2])

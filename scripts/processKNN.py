@@ -84,7 +84,7 @@ def process_KNN_total(city,scenario, attr_values, year, init_shp_gpkg, removeFil
             else: dst_csv = cityDestPath + "data/KNN/CSV/{0}_{1}.csv".format(destNameWhole, i)
             
             orig_csv = cityDestPath + "data/KNN/CSV/{0}_{1}.csv".format(destNameWhole, i-1)
-            if not os.path.exists(orig_csv): orig_csv = cityDestPath + "data/CSV/{0}.csv".format(destNameWhole)
+            if not os.path.exists(orig_csv): orig_csv = cityDestPath + "data/CSV_AW/{0}.csv".format(destNameWhole)
             createFolder(cityDestPath + "data/KNN/GPKG/")
             createFolder(cityDestPath + "data/KNN/CSV/")
             

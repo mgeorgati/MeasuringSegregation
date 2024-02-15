@@ -8,7 +8,7 @@ from basic.fixStructure import processProjections, calcDifference, fixNull
 from basic.rasterToshp import mainRaster
 from config.config import python_scripts_folder_path
 from plotting.createGifs import createGIFs
-from plotting.plot import plotProjections, plotProjectionsVectors
+from plotting.plot import plotProjections, plotProjectionsVectors, plotProjectionsVectorsAggr
 from config.config import gdal_rasterize_path
 from calcKNN.estimateSumKNN import calc_summaryKNN_sums
 
@@ -16,7 +16,7 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
                         processRawOutput, init_fix_null, init_calc_dif, fix_negative_values,
                         init_raster_shp, init_shp_to_raster,
                         
-                        plotMaps100): 
+                        plotMaps100, plotMapsAggr): 
     
     if city == 'grootams':
         from config.grootams import (cityDestPath, districtPath, invertArea,
@@ -72,7 +72,7 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
     
     if init_calc_dif == "yes":
         if year == 2030:
-            src_file_previous = cityDestPath + "data/GeoTIFF/{0}_fixed.tif".format(destName_previous)
+            src_file_previous = cityDestPath + "data/GeoTIFF_AW/{0}.tif".format(destName_previous)
         else:
             src_file_previous = cityDestPath + "data/GeoTIFF_sum/{0}.tif".format(destName_previous)
         src_file = cityDestPath + "data/GeoTIFF_dif/{0}.tif".format(destName)
@@ -89,8 +89,8 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
         print(year, scenario, attr_value)
         
         src_path = cityDestPath + "data/GeoTIFF_sum/{0}.tif".format(destName)
-        src_file_previous = cityDestPath + "data/GeoTIFF/2020_{0}.tif".format(attr_value)
-        fraster = cityDestPath + "data/GeoTIFF/{0}.tif".format(destName)
+        src_file_previous = cityDestPath + "data/GeoTIFF_AW/2020_{0}.tif".format(attr_value)
+        fraster = cityDestPath + "data/GeoTIFF_AW/{0}.tif".format(destName)
         
         removeRandomPeople(src_path, src_file_previous, fraster)
         # This is an alternative , where the negative values are added on the nearest cell with value>abs(neg)
@@ -99,9 +99,9 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
         #fixNegatives(pointsPath, attr_value, dst_path)
 
     if init_raster_shp == "yes":
-        src_file = cityDestPath + "data/GeoTIFF/{0}.tif".format(destName)
-        createFolder(cityDestPath + "data/SHP")
-        outSHPfn = cityDestPath + "data/SHP/{0}.geojson".format(destName)
+        src_file = cityDestPath + "data/GeoTIFF_AW/{0}.tif".format(destName)
+        createFolder(cityDestPath + "data/SHP_AW1")
+        outSHPfn = cityDestPath + "data/SHP_AW1/{0}.geojson".format(destName)
         
         print('| Converting raster to vector layer')
         mainRaster(src_file,outSHPfn, attr_value)
@@ -109,14 +109,17 @@ def process_Projections(city, scenario, attr_value, year, srcNameDef,
         print('------------------------------ for {0}, in {1}, in scenario:{2}, in year:{3} ------------------------------'.format(attr_value, city, scenario, year))
     
     if init_shp_to_raster  == "yes":
-        src_file = cityDestPath + "data/GPKG/{0}.geojson".format(destNameWhole)
-        dst_file = cityDestPath + "data/GeoTIFF/{0}.tif".format(destName)
+        src_file = cityDestPath + "data/GPKG_AW/{0}.geojson".format(destNameWhole)
+        dst_file = cityDestPath + "data/GeoTIFF_AW/{0}.tif".format(destName)
         shptoraster(raster_file, src_file, gdal_rasterize_path, dst_file, attr_value , xres=100, yres=100)
     
     if plotMaps100 == 'yes':
+        plotProjections(destName, city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
+        #plotProjectionsVectors(destNameWhole , city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
+    
+    if plotMapsAggr == 'yes':
         #plotProjections(destName, city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
-        plotProjectionsVectors(destNameWhole , city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
-                
+        plotProjectionsVectorsAggr(destNameWhole, city, cityDestPath, attr_value, scenario, year, districtPath, neighPath, streetsPath, waterPath, invertArea)
 def process_ProjectionsTotal(city, scenario, attr_values, year,
                         init_shp_gpkg, init_point_cell, 
                         init_calc_summary, init_calc_dis, calcSums
@@ -140,13 +143,14 @@ def process_ProjectionsTotal(city, scenario, attr_values, year,
         destNameWhole = '{1}_{0}'.format(scenario, year)
     
     createFolder(cityDestPath + "Indexes")
+    
     if init_shp_gpkg == "yes":
-        geojsonPath = cityDestPath + "data/SHP/"
-        dst_vector = cityDestPath + "data/GPKG/{0}_points.geojson".format(destNameWhole)
-        dst_csv = cityDestPath + "data/CSV/{0}.csv".format(destNameWhole)
+        geojsonPath = cityDestPath + "data/SHP_AW1/"
+        dst_vector = cityDestPath + "data/GPKG_AW/{0}_points.geojson".format(destNameWhole)
+        dst_csv = cityDestPath + "data/CSV_AW/{0}.csv".format(destNameWhole)
         
-        createFolder(cityDestPath + "data/GPKG/")
-        createFolder(cityDestPath + "data/CSV/")
+        createFolder(cityDestPath + "data/GPKG_AW/")
+        createFolder(cityDestPath + "data/CSV_AW/")
         
         print('| Combining the individual countries to one GPKG ans CSV file')
         combineGeoJSON(geojsonPath, dst_csv, dst_vector, destNameWhole, attr_values,city)
@@ -155,8 +159,8 @@ def process_ProjectionsTotal(city, scenario, attr_values, year,
     
     if init_point_cell == "yes":
         # Convert points to gridCells
-        dst_vector = cityDestPath + "data/GPKG/{0}_points.geojson".format(destNameWhole)
-        dst_path = cityDestPath + "data/GPKG/{0}.geojson".format(destNameWhole)
+        dst_vector = cityDestPath + "data/GPKG_AW/{0}_points.geojson".format(destNameWhole)
+        dst_path = cityDestPath + "data/GPKG_AW/{0}.geojson".format(destNameWhole)
         
         print('| Converting the point dataset to grid cells GPKG')
         pointsTOgrid(gridPath, dst_vector, dst_path)
@@ -175,8 +179,8 @@ def process_ProjectionsTotal(city, scenario, attr_values, year,
         print('------------------------------ for {0}, in scenario:{1}, in year:{2} ------------------------------'.format(city, scenario, year))
 
     if init_calc_dis == "yes":
-        srcPath = cityDestPath + "data/GPKG/{0}.geojson".format(destNameWhole)
-        dissimFile = cityDestPath + "Indexes/dissimilarity_{}.csv".format(scenario)
+        srcPath = cityDestPath + "data/GPKG_AW/{0}.geojson".format(destNameWhole)
+        dissimFile = cityDestPath + "Indexes/dissimilarity_AW_{}.csv".format(scenario)
         
         
         print('| Estmating the dissimilarity index')

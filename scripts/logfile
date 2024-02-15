@@ -1,0 +1,190 @@
+2023-05-19 15:22:18.351 UTC [4707] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-05-19 15:22:18.362 UTC [4707] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2023-05-19 15:22:18.387 UTC [4708] LOG:  database system was shut down at 2023-05-19 15:21:40 UTC
+2023-05-19 15:22:18.394 UTC [4707] LOG:  database system is ready to accept connections
+2023-05-19 15:23:57.860 UTC [4730] FATAL:  database "rom_data" does not exist
+2023-05-19 15:24:12.173 UTC [4734] ERROR:  permission denied to create database
+2023-05-19 15:24:12.173 UTC [4734] STATEMENT:   CREATE database products 
+2023-05-19 15:24:42.510 UTC [4740] ERROR:  permission denied to create database
+2023-05-19 15:24:42.510 UTC [4740] STATEMENT:   CREATE database products 
+2023-05-19 15:26:41.163 UTC [4707] LOG:  received smart shutdown request
+2023-05-19 15:26:41.182 UTC [4707] LOG:  background worker "logical replication launcher" (PID 4714) exited with exit code 1
+2023-05-19 15:26:41.182 UTC [4709] LOG:  shutting down
+2023-05-19 15:26:41.256 UTC [4707] LOG:  database system is shut down
+2023-05-19 15:29:36.591 UTC [4776] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2023-05-19 15:29:36.606 UTC [4776] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2023-05-19 15:29:36.633 UTC [4777] LOG:  database system was shut down at 2023-05-19 15:26:41 UTC
+2023-05-19 15:29:36.641 UTC [4776] LOG:  database system is ready to accept connections
+2023-05-19 15:30:59.928 UTC [4795] FATAL:  database "rom_data" does not exist
+2023-05-19 15:31:15.165 UTC [4797] ERROR:  permission denied to create database
+2023-05-19 15:31:15.165 UTC [4797] STATEMENT:   CREATE database products 
+2023-05-19 15:44:51.275 UTC [6290] ERROR:  type "geometry" does not exist at character 264
+2023-05-19 15:44:51.275 UTC [6290] STATEMENT:  
+	CREATE TABLE public.rom_2011_censustracts (
+		csid BIGINT, 
+		totalpop BIGINT, 
+		totalmig BIGINT, 
+		"ITA" BIGINT, 
+		"BGD" BIGINT, 
+		"PHL" BIGINT, 
+		"ROU" BIGINT, 
+		"EU" BIGINT, 
+		"nonEUEu" BIGINT, 
+		"Africa" BIGINT, 
+		"America" BIGINT, 
+		"Asia" BIGINT, 
+		geometry geometry(GEOMETRY,3035)
+	)
+	
+	
+2023-05-19 16:02:32.694 UTC [11557] ERROR:  type "geometry" does not exist at character 264
+2023-05-19 16:02:32.694 UTC [11557] STATEMENT:  
+	CREATE TABLE public.rom_2011_censustracts (
+		csid BIGINT, 
+		totalpop BIGINT, 
+		totalmig BIGINT, 
+		"ITA" BIGINT, 
+		"BGD" BIGINT, 
+		"PHL" BIGINT, 
+		"ROU" BIGINT, 
+		"EU" BIGINT, 
+		"nonEUEu" BIGINT, 
+		"Africa" BIGINT, 
+		"America" BIGINT, 
+		"Asia" BIGINT, 
+		geometry geometry(GEOMETRY,3035)
+	)
+	
+	
+2023-05-19 16:05:12.319 UTC [11574] FATAL:  database "ubuntu" does not exist
+2023-05-19 16:08:01.287 UTC [11622] ERROR:  type "geometry" does not exist at character 264
+2023-05-19 16:08:01.287 UTC [11622] STATEMENT:  
+	CREATE TABLE public.rom_2011_censustracts (
+		csid BIGINT, 
+		totalpop BIGINT, 
+		totalmig BIGINT, 
+		"ITA" BIGINT, 
+		"BGD" BIGINT, 
+		"PHL" BIGINT, 
+		"ROU" BIGINT, 
+		"EU" BIGINT, 
+		"nonEUEu" BIGINT, 
+		"Africa" BIGINT, 
+		"America" BIGINT, 
+		"Asia" BIGINT, 
+		geometry geometry(GEOMETRY,3035)
+	)
+	
+	
+2023-05-19 16:12:01.973 UTC [12153] ERROR:  type "geometry" does not exist at character 264
+2023-05-19 16:12:01.973 UTC [12153] STATEMENT:  
+	CREATE TABLE public.rom_2011_censustracts (
+		csid BIGINT, 
+		totalpop BIGINT, 
+		totalmig BIGINT, 
+		"ITA" BIGINT, 
+		"BGD" BIGINT, 
+		"PHL" BIGINT, 
+		"ROU" BIGINT, 
+		"EU" BIGINT, 
+		"nonEUEu" BIGINT, 
+		"Africa" BIGINT, 
+		"America" BIGINT, 
+		"Asia" BIGINT, 
+		geometry geometry(GEOMETRY,3035)
+	)
+	
+	
+2023-05-19 16:12:50.955 UTC [12172] ERROR:  type "geometry" does not exist at character 264
+2023-05-19 16:12:50.955 UTC [12172] STATEMENT:  
+	CREATE TABLE public.rom_2011_censustracts (
+		csid BIGINT, 
+		totalpop BIGINT, 
+		totalmig BIGINT, 
+		"ITA" BIGINT, 
+		"BGD" BIGINT, 
+		"PHL" BIGINT, 
+		"ROU" BIGINT, 
+		"EU" BIGINT, 
+		"nonEUEu" BIGINT, 
+		"Africa" BIGINT, 
+		"America" BIGINT, 
+		"Asia" BIGINT, 
+		geometry geometry(GEOMETRY,3035)
+	)
+	
+	
+2023-05-19 16:14:40.125 UTC [12183] FATAL:  database "my_database" does not exist
+2023-05-19 16:15:15.946 UTC [12195] ERROR:  extension "postgis" already exists
+2023-05-19 16:15:15.946 UTC [12195] STATEMENT:  CREATE EXTENSION postgis;
+2023-05-19 19:49:47.892 UTC [14525] ERROR:  canceling autovacuum task
+2023-05-19 19:49:47.892 UTC [14525] CONTEXT:  automatic vacuum of table "myinnrer_db.public.rom_arealweight"
+2023-05-20 01:45:02.756 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 01:45:12.827 UTC [15453] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 05:58:02.992 UTC [16080] ERROR:  canceling autovacuum task
+2023-05-20 05:58:02.992 UTC [16080] CONTEXT:  automatic analyze of table "myinnrer_db.public.rom_arealweight"
+2023-05-20 09:16:33.747 UTC [17168] ERROR:  relation "rom_cover_analysis" does not exist at character 47
+2023-05-20 09:16:33.747 UTC [17168] STATEMENT:  SELECT id, "PHL_2001_coverage", geometry FROM rom_cover_analysis
+2023-05-20 09:24:06.809 UTC [17246] ERROR:  canceling autovacuum task
+2023-05-20 09:24:06.809 UTC [17246] CONTEXT:  automatic analyze of table "myinnrer_db.public.rom_arealweight"
+2023-05-20 10:37:36.986 UTC [19755] ERROR:  canceling autovacuum task
+2023-05-20 10:37:36.986 UTC [19755] CONTEXT:  automatic vacuum of table "myinnrer_db.public.rom_arealweight"
+2023-05-20 10:58:09.120 UTC [19885] ERROR:  canceling autovacuum task
+2023-05-20 10:58:09.120 UTC [19885] CONTEXT:  automatic vacuum of table "myinnrer_db.public.rom_arealweight"
+2023-05-20 15:20:13.759 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:20:13.760 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:20:23.827 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:20:23.830 UTC [4782] LOG:  could not write temporary statistics file "pg_stat_tmp/db_12368.tmp": No space left on device
+2023-05-20 15:20:23.830 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:20:23.830 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:20:33.898 UTC [22269] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:20:44.197 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:20:44.197 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:20:54.268 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:20:54.270 UTC [4782] LOG:  could not write temporary statistics file "pg_stat_tmp/db_16385.tmp": No space left on device
+2023-05-20 15:20:54.270 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:20:54.270 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:21:04.340 UTC [22270] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:21:13.769 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:21:13.769 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:21:23.836 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:21:23.838 UTC [4782] LOG:  could not write temporary statistics file "pg_stat_tmp/db_12368.tmp": No space left on device
+2023-05-20 15:21:23.839 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:21:23.839 UTC [4782] LOG:  could not close temporary statistics file "pg_stat2023-05-20 15:24:33.938 UTC [22279] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:24:44.238 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:24:44.238 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:24:54.310 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:24:54.313 UTC [4782] LOG:  could not write temporary statistics file "pg_stat_tmp/db_16385.tmp": No space left on device
+2023-05-20 15:24:54.313 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:24:54.313 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:25:04.383 UTC [22403] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:25:13.804 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:25:13.804 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:25:23.874 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:25:23.876 UTC [4782] LOG:  could not write temporary statistics file "pg_stat_tmp/db_12368.tmp": No space left on device
+2023-05-20 15:25:23.876 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:25:23.876 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:25:33.945 UTC [22404] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:25:44.248 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:25:44.248 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:25:54.318 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:25:54.321 UTC [4782] LOG:  could not write temporary statistics file "pg_stat_tmp/db_16385.tmp": No space left on device
+2023-05-20 15:25:54.321 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:25:54.321 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:26:04.393 UTC [22405] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:26:13.813 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:26:13.813 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:26:23.884 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:26:23.886 UTC [4782] LOG:  could not write temporary statistics file "pg_stat_tmp/db_12368.tmp": No space left on device
+2023-05-20 15:26:23.886 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:26:23.886 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-05-20 15:26:33.955 UTC [22406] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-20 15:26:44.258 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
+2023-05-20 15:26:44.258 UTC [4782] LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
+2023-2023-05-22 07:58:49.526 UTC [28578] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-05-24 08:29:09.522 UTC [4781] LOG:  using stale statistics instead of current ones because stats collector is not responding
+2023-06-27 09:25:05.886 UTC [4776] LOG:  received smart shutdown request
+2023-06-27 09:25:06.088 UTC [4776] LOG:  background worker "logical replication launcher" (PID 4783) exited with exit code 1
+2023-06-27 09:25:06.088 UTC [4776] LOG:  received SIGHUP, reloading configuration files
+2023-06-27 09:25:06.089 UTC [4778] LOG:  shutting down
+2023-06-27 09:25:06.346 UTC [4776] LOG:  database system is shut down

@@ -31,7 +31,7 @@ def processProjections(city, scenario, attr_value, year, srcNameDef, srcPath, ci
         
         srcName = 'dissever01_{0}_CLF_LR0001_{1}_{2}_{4}_{3}'.format(scenario, year, city, popValue, srcNameDef)
     print(srcPath)
-    destPath = cityDestPath + '/data/GeoTIFF_dif/'
+    destPath = cityDestPath + '/data/GeoTIFF_dif/'#
     createFolder(destPath)
     renameCopyTif(srcPath, srcName, destPath, destName)
     

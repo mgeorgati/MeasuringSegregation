@@ -63,16 +63,14 @@ def estimateKNN(inputPath, raster_file, templatePath, cityDestPath, destName):
         writeRaster(inputPath, outPath, c0)
 
 def calc_summaryKNN_sums(cityDestPath, city, year, scenario, attr_values, excelFile):
-    ndf = pd.DataFrame(columns=['Distance (m)','Year', 'Group', '0-25','25-50','50-75','75-100','100-200','200-500','>500' ])
-    for k in range(0,8):
+    ndf = pd.DataFrame(columns=['Distance (m)','Year', 'Group', '0-25','25-50','>50' ])
+    for k in range(0,5):
         if k ==0 : d = 100
-        elif k==1 : d= 150
-        elif k==2 : d= 200
-        elif k==3 : d= 250
-        elif k==4 : d= 300
-        elif k==5 : d= 350
-        elif k==6 : d= 400
-        elif k==7 : d= 450
+        elif k==1 : d= 200
+        elif k==2 : d= 300
+        elif k==3 : d= 400
+        elif k==4 : d= 500
+        
         for i in attr_values:
             if scenario == 'hist':
                 inputPath = cityDestPath + "/data/KNN/SUMs/conv_sum_{0}_{1}_{3}.tif".format(k, year, scenario, i)
@@ -87,12 +85,12 @@ def calc_summaryKNN_sums(cityDestPath, city, year, scenario, attr_values, excelF
             length3 = len(arr [(arr < 100) & (arr >= 75)]) /len(arr[arr > 0]) *100
             length4 = len(arr [(arr < 200) & (arr >= 100)]) /len(arr[arr > 0]) *100
             length5 = len(arr [(arr < 500) & (arr >= 200)]) /len(arr[arr > 0]) *100
-            length6 = len(arr [(arr > 500) ]) /len(arr[arr > 0]) *100
+            length6 = len(arr [(arr >=50) ]) /len(arr[arr > 0]) *100
 
             if ndf.size == 0:
-                ndf.loc[1] = [d,year, i, length0, length1, length2, length3, length4, length5, length6]
+                ndf.loc[1] = [d,year, i, length0, length1, length6]
             else: 
-                ndf.loc[-1] = [d,year, i, length0, length1, length2, length3, length4, length5, length6]
+                ndf.loc[-1] = [d,year, i, length0, length1, length6]
                 ndf.index = ndf.index + 1  # shifting index
                 #ndf = ndf.sort_index()  # sorting by index
                 # adding a row

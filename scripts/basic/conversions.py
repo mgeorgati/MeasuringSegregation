@@ -91,7 +91,7 @@ def combineGeoJSON(geojsonPath, dst_csv, dst_vector, destNameWhole, attr_values,
             lf['totalpop']= lf['totalmig'] + lf['POL']
         elif city =='rom' : 
             lf['totalmig']= lf['BGD']+ lf['PHL']+ lf['ROU']+ lf['EU']+ lf['nonEUEu']+ lf['Africa'] + lf['America']+ lf['Asia']
-            lf['totalpop']= lf['totalmig'] + lf['ITA']
+            lf['totalpop']= lf['totalmig'] + lf['ITA'] 
         
         lf = lf.rename(columns={'lat_left':'lat','lon_left':'lon'})
         lf = lf.loc[:,~lf.columns.duplicated()].copy()
@@ -160,7 +160,7 @@ def shptoraster(raster_file, src_file, gdal_rasterize_path, dst_file, column_nam
     maxx = minx + geoTransform[1] * data.RasterXSize
     miny = maxy + geoTransform[5] * data.RasterYSize
     data = None    
-    cmd = """ "{0}/gdal_rasterize.exe" -a "{9}" -te {1} {2} {3} {4} -tr {5} "{6}" "{7}" "{8}" """\
+    cmd = """ gdal_rasterize -a "{9}" -te {1} {2} {3} {4} -tr {5} "{6}" "{7}" "{8}" """\
                 .format(gdal_rasterize_path, minx, miny, maxx, maxy, xres, yres, src_file, dst_file, column_name)
                 
     subprocess.call(cmd, shell=True)
